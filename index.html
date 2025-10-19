@@ -26,7 +26,6 @@
     }
   </script>
 
-
   <!-- Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,7 +38,6 @@
     .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
     .badge { border: 1px solid rgba(255,255,255,0.15); }
   </style>
-
 
   <!-- JSZip + FileSaver for ZIP downloads (no server needed) -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -62,7 +60,6 @@
     </div>
   </header>
 
-
   <!-- HERO -->
   <section class="relative overflow-hidden">
     <div class="mx-auto max-w-6xl px-4 pt-12 pb-14 grid md:grid-cols-2 gap-10 items-center">
@@ -81,67 +78,322 @@
           <span class="badge px-2 py-1 rounded-full">Download ZIP</span>
         </div>
       </div>
-Thought for a few seconds
+      <div class="relative">
+        <div class="glass rounded-3xl p-6 border border-white/10 shadow-soft">
+          <pre class="code text-sm leading-6 text-white/90 whitespace-pre-wrap">// Example (React Native / Expo)
+import { Text, View } from 'react-native';
+export default function App(){
+  return (<View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
+    <Text style={{fontSize:24}}>Hello, VisionCraft 👋</Text>
+  </View>);
+}
+</pre>
+        </div>
+        <div class="absolute -bottom-6 -right-6 glass rounded-2xl p-4 border border-white/10 shadow-soft">
+          <p class="code text-xs text-white/80">npm create expo@latest</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-Heck yeah — we can give VisionCraft a real AI brain. Since GitHub Pages can’t hide secrets, we’ll keep your OpenAI API key off the page by routing requests through a tiny serverless proxy (free). Then your site’s new “VisionCraft AI (beta)” chat box (I added it to your page in the canvas) will talk to that proxy.
+  <!-- BUILDER -->
+  <section id="builder" class="mx-auto max-w-6xl px-4 pb-16">
+    <div class="bg-slate-900/70 border border-white/10 rounded-3xl shadow-soft p-6 md:p-8">
+      <h2 class="text-2xl font-bold">Project Builder</h2>
+      <p class="text-white/75 mt-1">Fill in a few fields, then hit Generate to download a ZIP starter you can open in your favorite tools.</p>
 
-Here’s the quickest, zero-install path using Cloudflare Workers:
+      <form id="form" class="grid md:grid-cols-2 gap-6 mt-6">
+        <div class="space-y-2">
+          <label class="text-sm text-white/90" for="projectName">Project name</label>
+          <input id="projectName" class="w-full rounded-xl bg-slate-800/70 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="MyAwesomeApp" value="MyAwesomeApp"/>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm text-white/90" for="projectType">Project type</label>
+          <select id="projectType" class="w-full rounded-xl bg-slate-800/70 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="app">Mobile App</option>
+            <option value="game">Game</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm text-white/90" for="framework">Framework / Engine</label>
+          <select id="framework" class="w-full rounded-xl bg-slate-800/70 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="expo">React Native (Expo)</option>
+            <option value="flutter">Flutter</option>
+            <option value="unity">Unity (C#)</option>
+            <option value="godot">Godot (GDScript)</option>
+          </select>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm text-white/90" for="theme">UI theme</label>
+          <select id="theme" class="w-full rounded-xl bg-slate-800/70 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="light">Light</option>
+            <option value="dark" selected>Dark</option>
+            <option value="system">System</option>
+          </select>
+        </div>
+        <div class="md:col-span-2 space-y-2">
+          <label class="text-sm text-white/90" for="prompt">Describe your idea (AI prompt)</label>
+          <textarea id="prompt" rows="3" class="w-full rounded-xl bg-slate-800/70 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="A habit tracker for workouts with streaks and reminders..."></textarea>
+        </div>
+        <div class="space-y-2">
+          <label class="text-sm text-white/90">Features</label>
+          <div class="grid grid-cols-2 gap-2 text-sm text-white/80">
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="auth" class="accent-brand-500">Auth</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="offline" class="accent-brand-500">Offline</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="camera" class="accent-brand-500">Camera</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="ads" class="accent-brand-500">Ads</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="iap" class="accent-brand-500">In‑App Purchases</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="notifications" class="accent-brand-500">Notifications</label>
+          </div>
+        </div>
+        <div class="space-y-2" id="gameExtras" style="display:none;">
+          <label class="text-sm text-white/90">Game extras</label>
+          <div class="grid grid-cols-2 gap-2 text-sm text-white/80">
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="2d" class="accent-brand-500">2D</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="3d" class="accent-brand-500">3D</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="physics" class="accent-brand-500">Physics</label>
+            <label class="inline-flex items-center gap-2"><input type="checkbox" value="touch" class="accent-brand-500">Touch Controls</label>
+          </div>
+        </div>
+        <div class="md:col-span-2">
+          <button id="generateBtn" type="button" class="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-500 px-5 py-2.5 rounded-xl font-semibold shadow-soft">Generate Starter ZIP</button>
+        </div>
+      </form>
 
-1) Make a free Cloudflare Worker (your private proxy)
+      <div id="result" class="mt-6 hidden">
+        <div class="glass rounded-2xl p-4 border border-white/10">
+          <p class="text-sm text-white/80">ZIP built. Your download should start automatically. If it doesn’t, click <button id="downloadFallback" class="underline">here</button>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-Go to Cloudflare → Workers & Pages → Create Worker → Quick Edit
+  <!-- HOW -->
+  <section id="how" class="mx-auto max-w-6xl px-4 pb-16">
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="glass rounded-2xl p-6 border border-white/10">
+        <div class="text-brand-300 font-semibold">1. Describe</div>
+        <h3 class="text-xl font-bold mt-1">Tell VisionCraft your idea</h3>
+        <p class="text-white/75 mt-2">Write a short prompt and choose a framework. We’ll tailor the files, README, and feature stubs for you.</p>
+      </div>
+      <div class="glass rounded-2xl p-6 border border-white/10">
+        <div class="text-brand-300 font-semibold">2. Generate</div>
+        <h3 class="text-xl font-bold mt-1">Download a ready starter</h3>
+        <p class="text-white/75 mt-2">We build a project ZIP in your browser using JSZip. No data leaves your device.</p>
+      </div>
+      <div class="glass rounded-2xl p-6 border border-white/10">
+        <div class="text-brand-300 font-semibold">3. Run</div>
+        <h3 class="text-xl font-bold mt-1">Open in tools you love</h3>
+        <p class="text-white/75 mt-2">Use Expo Go, Flutter, Unity, or Godot. Iterate fast, then commit to GitHub or ship to stores.</p>
+      </div>
+    </div>
+  </section>
 
-Paste this code over the default:
+  <!-- FAQ -->
+  <section id="faq" class="mx-auto max-w-6xl px-4 pb-24">
+    <div class="bg-slate-900/70 border border-white/10 rounded-3xl shadow-soft p-6 md:p-8">
+      <h2 class="text-2xl font-bold">FAQ</h2>
+      <div class="mt-4 space-y-4">
+        <details class="glass rounded-xl p-4 border border-white/10">
+          <summary class="font-semibold cursor-pointer">Does this use AI?</summary>
+          <p class="text-white/80 mt-2">The generator uses heuristic templates that incorporate your prompt. You can optionally paste an API key to expand prompts locally (coming soon). Everything runs client‑side.</p>
+        </details>
+        <details class="glass rounded-xl p-4 border border-white/10">
+          <summary class="font-semibold cursor-pointer">Is my idea sent to a server?</summary>
+          <p class="text-white/80 mt-2">No. All code is produced in your browser and downloaded as a ZIP. There’s no backend.</p>
+        </details>
+        <details class="glass rounded-xl p-4 border border-white/10">
+          <summary class="font-semibold cursor-pointer">Can I deploy this site on GitHub Pages?</summary>
+          <p class="text-white/80 mt-2">Yes. Place this <span class="code">index.html</span> in your repo root or <span class="code">/docs</span>, then enable Pages. That’s it.</p>
+        </details>
+      </div>
+    </div>
+  </section>
 
-export default {
-  async fetch(request, env) {
-    // CORS preflight
-    if (request.method === 'OPTIONS') {
-      return new Response('', { headers: cors(env) });
+  <footer class="border-t border-white/10">
+    <div class="mx-auto max-w-6xl px-4 py-8 text-sm text-white/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>© <span id="year"></span> VisionCraft. Built by you ✨</p>
+      <p>Client‑side • Open source • MIT</p>
+    </div>
+  </footer>
+
+  <!-- AI CHAT (client) -->
+  <section id="ai" class="mx-auto max-w-6xl px-4 pb-24">
+    <div class="bg-slate-900/70 border border-white/10 rounded-3xl shadow-soft p-6 md:p-8">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <h2 class="text-2xl font-bold">VisionCraft AI (beta)</h2>
+        <div class="text-xs text-white/70">Powered by OpenAI via your private proxy</div>
+      </div>
+      <div class="mt-4 grid md:grid-cols-3 gap-6">
+        <div class="md:col-span-2">
+          <div id="chatBox" class="h-72 overflow-y-auto glass rounded-2xl p-4 border border-white/10 space-y-3 text-sm"></div>
+          <div class="mt-3 flex gap-2">
+            <input id="userMsg" class="flex-1 rounded-xl bg-slate-800/70 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Ask VisionCraft to scaffold a game loop, write a Unity script, etc."/>
+            <button id="sendBtn" class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-500 px-4 py-2 rounded-xl font-semibold">Send</button>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <label class="text-sm text-white/80">API Proxy URL</label>
+          <input id="proxyUrl" class="w-full rounded-xl bg-slate-800/70 border border-white/10 px-3 py-2" placeholder="https://your-worker.example.workers.dev/chat"/>
+          <p class="text-xs text-white/60">Keep your OpenAI API key on a server you control (e.g., Cloudflare Worker, Vercel, Netlify). Do <strong>not</strong> put it in this page.</p>
+          <details class="glass rounded-xl p-3 border border-white/10">
+            <summary class="font-semibold">System prompt (optional)</summary>
+            <textarea id="systemPrompt" rows="5" class="w-full mt-2 rounded-lg bg-slate-800/70 border border-white/10 px-2 py-2 text-sm" placeholder="You are VisionCraft, a helpful AI that writes minimal, production-ready starter code for mobile apps and games. Prefer Expo, Flutter, Unity, or Godot depending on user choice."></textarea>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+
+    // --- AI Chat client ---
+    const chatState = { messages: [] };
+
+    function renderChat(){
+      const box = $('#chatBox');
+      if(!box) return;
+      box.innerHTML = chatState.messages.map(m => `
+        <div class="flex ${m.role==='user' ? 'justify-end' : 'justify-start'}">
+          <div class="max-w-[85%] ${m.role==='user' ? 'bg-brand-600' : 'glass'} px-3 py-2 rounded-2xl border border-white/10">
+            <div class="text-[11px] uppercase tracking-wider opacity-70 mb-1">${m.role}</div>
+            <div class="whitespace-pre-wrap">${m.content.replace(/[&<>]/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[s]))}</div>
+          </div>
+        </div>`).join('');
+      box.scrollTop = box.scrollHeight;
     }
-    if (request.method !== 'POST') return new Response('Not found', { status: 404 });
 
-    const { messages = [], system = '' } = await request.json();
+    async function sendChat(){
+      const input = $('#userMsg');
+      const url = $('#proxyUrl').value.trim();
+      if(!input || !url) return alert('Enter your Proxy URL first.');
+      const text = input.value.trim();
+      if(!text) return;
+      chatState.messages.push({ role:'user', content: text });
+      renderChat();
+      input.value = '';
 
-    // Build a Chat Completions request (simple & compatible)
-    const body = {
-      model: env.OPENAI_MODEL || "gpt-4.1-mini",
-      messages: [
-        system ? { role: "system", content: system } : null,
-        ...messages
-      ].filter(Boolean)
+      const body = { messages: chatState.messages, system: $('#systemPrompt')?.value || '' };
+      try{
+        const res = await fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify(body) });
+        const data = await res.json();
+        chatState.messages.push({ role:'assistant', content: data.text || '[no reply]' });
+      }catch(err){
+        chatState.messages.push({ role:'assistant', content: '⚠️ Error contacting proxy. Check URL & CORS.' });
+        console.error(err);
+      }
+      renderChat();
+    }
+
+    const samples = {
+      expoApp: (name, prompt, features) => `# ${name}\n\n${prompt ? `> ${prompt}\n\n` : ''}This is a React Native (Expo) starter created with VisionCraft.\n\n## Quick start\n\n\n1. Install dependencies:\n\n   \`\`\`bash\n   npm i -g expo\n   npm i\n   \`\`\`\n\n2. Run on device:\n\n   \`\`\`bash\n   npx expo start\n   \`\`\`\n\n3. Open Expo Go on your phone and scan the QR.\n\n## Features\n- ${features.join("\n- ") || 'Starter screen'}\n\n## Next steps\n- Replace placeholder UI in App.js\n- Add screens and navigation\n- Wire up APIs or local storage\n`,
+
+      expoPackageJSON: (name) => ({
+        name: name.toLowerCase().replace(/\s+/g,'-'),
+        version: '0.1.0',
+        private: true,
+        main: 'index.js',
+        scripts: { start: 'expo start', android: 'expo run:android', ios: 'expo run:ios', web: 'expo start --web' },
+        dependencies: { expo: '~51.0.0', 'expo-status-bar': '~1.12.1', react: '18.2.0', 'react-native': '0.74.0' }
+      }),
+
+      expoAppJs: (theme) => `import { StatusBar } from 'expo-status-bar';\nimport { StyleSheet, Text, View } from 'react-native';\n\nexport default function App() {\n  return (\n    <View style={styles.container}>\n      <Text style={styles.title}>Hello, VisionCraft 👋</Text>\n      <Text style={styles.subtitle}>Edit App.js to get started.</Text>\n      <StatusBar style="${theme === 'dark' ? 'light' : 'dark'}" />\n    </View>\n  );\n}\n\nconst styles = StyleSheet.create({\n  container: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '${theme === 'dark' ? '#0f172a' : '#ffffff'}' },\n  title: { fontSize: 24, fontWeight: '700', color: '${theme === 'dark' ? '#ffffff' : '#0f172a'}' },\n  subtitle: { marginTop: 6, color: '${theme === 'dark' ? '#cbd5e1' : '#334155'}' },\n});\n`,
+
+      flutterReadme: (name, prompt, features) => `# ${name}\n\n${prompt ? `> ${prompt}\n\n` : ''}Flutter starter created with VisionCraft.\n\n## Quick start\n\n\n1. Install Flutter SDK and run \`flutter doctor\`.\n2. Fetch packages: \`flutter pub get\`.\n3. Run: \`flutter run\`.\n\n## Features\n- ${features.join("\n- ") || 'Starter screen'}\n`,
+
+      flutterPubspec: (name) => `name: ${name.toLowerCase().replace(/\s+/g,'_')}\ndescription: A Flutter starter from VisionCraft\nversion: 0.1.0+1\nenvironment:\n  sdk: '>=3.0.0 <4.0.0'\ndependencies:\n  flutter:\n    sdk: flutter\n  cupertino_icons: ^1.0.8\ndev_dependencies:\n  flutter_test:\n    sdk: flutter\nflutter:\n  uses-material-design: true\n`,
+
+      flutterMain: (theme) => `import 'package:flutter/material.dart';\n\nvoid main() => runApp(const MyApp());\n\nclass MyApp extends StatelessWidget {\n  const MyApp({super.key});\n  @override\n  Widget build(BuildContext context) {\n    final brightness = Brightness.${theme === 'dark' ? 'dark' : 'light'};\n    return MaterialApp(\n      title: 'VisionCraft',\n      theme: ThemeData(brightness: brightness, useMaterial3: true),\n      home: const Home(),\n    );\n  }\n}\n\nclass Home extends StatelessWidget {\n  const Home({super.key});\n  @override\n  Widget build(BuildContext context) => Scaffold(\n    appBar: AppBar(title: const Text('Hello, VisionCraft 👋')),\n    body: const Center(child: Text('Edit lib/main.dart to get started.')),\n  );\n}\n`,
+
+      unityReadme: (name, prompt, features) => `# ${name} (Unity)\n\n${prompt ? `> ${prompt}\n\n` : ''}Unity starter scaffolding from VisionCraft.\n\n## Quick start\n\n\n1. Create a new 3D URP project in Unity Hub.\n2. Copy the \`Assets\` files from this ZIP into your project.\n3. Open the scene at \`Assets/Scenes/Main.unity\`.\n\n## Included\n- Minimal PlayerController.cs\n- Basic UI Canvas prefab\n- Input via old Input system (easy to replace)\n\n## Next steps\n- Replace placeholder assets\n- Add your gameplay systems\n- Wire up mobile builds (Android/iOS)\n`,
+
+      unityPlayer: () => `using UnityEngine;\n\npublic class PlayerController : MonoBehaviour {\n  public float speed = 3f;\n  void Update(){\n    float h = Input.GetAxis(\"Horizontal\");\n    float v = Input.GetAxis(\"Vertical\");\n    transform.Translate(new Vector3(h,0,v) * speed * Time.deltaTime);\n  }\n}\n`,
+
+      godotReadme: (name, prompt, features) => `# ${name} (Godot)\n\n${prompt ? `> ${prompt}\n\n` : ''}Godot 4 starter scaffolding from VisionCraft.\n\n## Quick start\n\n\n1. Open Godot 4 and create/import a project.\n2. Copy the \`scenes\` and \`scripts\` folders into your project folder.\n3. Set \`Main.tscn\` as your main scene.\n`,
+
+      godotMain: () => `[gd_scene load_steps=2 format=3]\n\n[node name=Main type=Node2D]\n\n[node name=Label node_paths=\"\" type=Label parent=\".\"]\ntext = \"Hello, VisionCraft 👋\"\n`,
+
+      godotScript: () => `extends Node2D\n\nfunc _ready():\n    print(\"VisionCraft ready\")\n`
     };
 
-    const r = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
+    function currentYear(){ $('#year').textContent = new Date().getFullYear(); }
 
-    if (!r.ok) {
-      const t = await r.text();
-      return new Response(JSON.stringify({ error: t || r.statusText }), {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...cors(env) }
-      });
+    function collectFeatures(){
+      const boxes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
+      return boxes.map(b => ({
+        auth: 'Authentication', offline: 'Offline capability', camera: 'Camera access', ads: 'Ad placeholders', iap: 'In‑app purchases', notifications: 'Local notifications',
+        '2d': '2D setup', '3d': '3D setup', physics: 'Physics placeholder', touch: 'Touch controls'
+      })[b.value] || b.value);
     }
 
-    const data = await r.json();
-    const text = data?.choices?.[0]?.message?.content ?? "";
-    return new Response(JSON.stringify({ text }), {
-      headers: { "Content-Type": "application/json", ...cors(env) }
-    });
-  }
-};
+    function sanitizeName(str){
+      return (str || 'MyAwesomeApp').replace(/[^a-zA-Z0-9_\-\s]/g,'').trim() || 'MyAwesomeApp';
+    }
 
-function cors(env) {
-  const origin = env.ALLOW_ORIGIN || "*";
-  return {
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Headers": "content-type, authorization",
-    "Access-Control-Allow-Methods": "POST, OPTIONS"
-  };
-}
+    async function buildZip(){
+      const name = sanitizeName($('#projectName').value);
+      const type = $('#projectType').value; // app | game
+      const framework = $('#framework').value; // expo | flutter | unity | godot
+      const theme = $('#theme').value; // light | dark | system
+      const prompt = ($('#prompt').value || '').trim();
+      const features = collectFeatures();
+
+      const zip = new JSZip();
+
+      if(framework === 'expo'){
+        zip.file('README.md', samples.expoApp(name, prompt, features));
+        zip.file('app.json', JSON.stringify({ expo: { name, slug: name.toLowerCase().replace(/\s+/g,'-') } }, null, 2));
+        zip.file('package.json', JSON.stringify(samples.expoPackageJSON(name), null, 2));
+        zip.file('App.js', samples.expoAppJs(theme));
+        zip.file('index.js', "import { registerRootComponent } from 'expo';\nimport App from './App';\nregisterRootComponent(App);\n");
+        zip.folder('.vscode')?.file('settings.json', JSON.stringify({ 'editor.formatOnSave': true }, null, 2));
+      }
+      else if(framework === 'flutter'){
+        zip.file('README.md', samples.flutterReadme(name, prompt, features));
+        zip.file('pubspec.yaml', samples.flutterPubspec(name));
+        zip.folder('lib')?.file('main.dart', samples.flutterMain(theme));
+        zip.folder('android'); zip.folder('ios'); // placeholders
+      }
+      else if(framework === 'unity'){
+        zip.file('README.md', samples.unityReadme(name, prompt, features));
+        zip.folder('Assets')?.folder('Scripts')?.file('PlayerController.cs', samples.unityPlayer());
+        zip.folder('Assets')?.folder('Scenes')?.file('Main.unity', '// Create a new empty scene and save as Main.unity');
+      }
+      else if(framework === 'godot'){
+        zip.file('README.md', samples.godotReadme(name, prompt, features));
+        zip.folder('scenes')?.file('Main.tscn', samples.godotMain());
+        zip.folder('scripts')?.file('main.gd', samples.godotScript());
+      }
+
+      // Common license & gitignore
+      zip.file('LICENSE', `MIT License\n\nCopyright (c) ${new Date().getFullYear()} ${name}\n\nPermission is hereby granted...`);
+      zip.file('.gitignore', `node_modules\n.expo\nbuild\n.DS_Store\n.idea\n.vscode\n`);
+
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const fileName = `${name}-${framework}-starter.zip`;
+      saveAs(blob, fileName);
+
+      const link = URL.createObjectURL(blob);
+      const fallback = document.createElement('a');
+      fallback.href = link; fallback.download = fileName;
+      $('#downloadFallback').onclick = () => fallback.click();
+      $('#result').classList.remove('hidden');
+    }
+
+    function toggleGameExtras(){
+      const isGame = $('#projectType').value === 'game';
+      $('#gameExtras').style.display = isGame ? 'block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      currentYear();
+      toggleGameExtras();
+      $('#projectType').addEventListener('change', toggleGameExtras);
+      $('#generateBtn').addEventListener('click', buildZip);
+      $('#sendBtn')?.addEventListener('click', sendChat);
+      $('#userMsg')?.addEventListener('keydown', (e) => { if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); } });
+    });
+  </script>
+</body>
+</html>
